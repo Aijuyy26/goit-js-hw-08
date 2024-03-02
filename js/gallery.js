@@ -63,35 +63,32 @@ const images = [
         описание: 'Lighthouse Coast Sea',
       },
     ];
+    
     const galleryRef = document.querySelector('.gallery');
-
-const galleryItemsMarkup = images
-  .map(
-    ({ preview, original, description }) => `
-    <li class="gallery-item">
-      <a class="gallery-link" href="${original}">
-        <img class="gallery-image" src="${preview}" data-source="${original}" alt="${description}" />
-      </a>
-    </li>
-  `
-  )
-  .join('');
-
-galleryRef.insertAdjacentHTML('beforeend', galleryItemsMarkup);
-
-
-
-function onGalleryClick(event) {
-    event.preventDefault();
-  
-    const target = event.target;
-    if (target.nodeName !== 'IMG') {
-      return;
+    const galleryItemsMarkup = images
+      .map(
+        ({ preview, original, описание }) => `
+        <li class="gallery-item">
+          <a class="gallery-link" href="${original}">
+            <img class="gallery-image" src="${preview}" data-source="${original}" alt="${описание}" />
+          </a>
+        </li>
+      `
+      )
+      .join('');
+    galleryRef.insertAdjacentHTML('beforeend', galleryItemsMarkup);
+    
+    const galleryItems = document.querySelectorAll('.gallery-item');
+    galleryItems.forEach(item => {
+      item.addEventListener('click', onGalleryClick);
+    });
+    function onGalleryClick(event) {
+      event.preventDefault();
+      const target = event.target;
+      if (target.nodeName !== 'IMG') {
+        return;
+      }
+      const largeImageUrl = target.dataset.source;
+      const instance = basicLightbox.create(`<img src="${largeImageUrl}" width="800" height="600">`);
+      instance.show();
     }
-  
-    const largeImageUrl = target.dataset.source;
-  
-    const instance = basicLightbox.create(`<img src="${largeImageUrl}" width="800" height="600">`);
-    instance.show();
-  }
-  
